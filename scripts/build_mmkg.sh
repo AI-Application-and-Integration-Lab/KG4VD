@@ -23,7 +23,7 @@
 # ─────────────────────────────────────────────────────────────────
 #   1. conda env `kg4vd` active, or `kg4vd` available on PATH.
 #      Example: pip install -e '.[gme]'
-#   2. For LLM=remote, .env in repo root with OPENROUTER_API_KEY,
+#   2. For the default remote recipe, .env in repo root with OPENROUTER_API_KEY,
 #      or OPENROUTER_API_KEY exported in the shell.
 #   3. MinerU 3.x installed in its own env; MINERU_PYTHON points at that env's
 #      python (see services/mineru/README.md).
@@ -37,7 +37,8 @@
 #   SKIP_RETRIEVAL_GRAPH=1  If 1, skip retrieval_graph. Set to 0 to run it.
 #   ENCODER_GPU=0           GPU pinned to GME encoder stages.
 #   MINERU_PYTHON=...       Path to the MinerU 3.x env's python.
-#   LLM=remote              Use recipe/OpenRouter remote LLM.
+#   LLM=remote              Use the recipe's remote LLM config. Default recipes
+#                           use OpenRouter.
 #   LLM=sglang              Use local sglang server. The script starts/stops
 #                           sglang around GME stages to avoid GPU contention.
 #   SGLANG_MODEL=...        Model name/path passed to launch_qwen36_sglang.sh.
@@ -86,7 +87,7 @@ Environment:
   SKIP_BUILD=1            Skip the main 7-stage build.
   SKIP_RETRIEVAL_GRAPH=0  Run the optional retrieval_graph stage.
   ENCODER_GPU=0           GPU used by GME encoder stages.
-  LLM=remote              Use recipe/OpenRouter remote LLM. Default.
+  LLM=remote              Use the recipe's remote LLM config. Default recipes use OpenRouter.
   LLM=sglang              Use local sglang server.
   MINERU_PYTHON=/path/python   MinerU 3.x env python.
 

@@ -8,11 +8,11 @@ mutually incompatible `transformers` pins and can't share one Python process:
 | **`kg4vd`** (main) | core pipeline + GME-Qwen2-VL encoder | `transformers<4.52` (GME remote code) | everything |
 | **`mineru`** | MinerU 3.x PDF ingest | `transformers>=4.57.3` | `build` (ingest stage) |
 | **`kg4vd_reranker`** | Qwen3-VL reranker HTTP service | `transformers>=4.57` | `query` (optional) |
-| **your sglang env** | local OpenAI-compatible LLM server | model-dependent | `build`/`query` with a local LLM (optional) |
+| **local LLM env** | OpenAI-compatible local LLM server, e.g. sglang | model-dependent | `build`/`query` with a local LLM (optional) |
 
 The model envs run out-of-process: ingest shells out to MinerU
 (`MINERU_PYTHON`), the reranker is reached over HTTP (`KG4VD_RERANKER_URL`),
-and a local LLM is reached through an OpenAI-compatible endpoint.
+and optional local LLMs are reached through an OpenAI-compatible endpoint.
 
 ## Prerequisites
 
@@ -25,7 +25,7 @@ and a local LLM is reached through an OpenAI-compatible endpoint.
 Creates the three managed conda envs and installs each:
 
 ```bash
-bash scripts/setup_envs.sh                 # all three; sglang -> see below
+bash scripts/setup_envs.sh                 # core envs; local LLM -> see below
 # or one at a time:
 bash scripts/setup_envs.sh kg4vd
 bash scripts/setup_envs.sh mineru
@@ -73,31 +73,39 @@ conda run -n kg4vd_reranker pip install -r services/reranker/requirements.txt
 See [`services/reranker/README.md`](./services/reranker/README.md). Launch with
 `bash scripts/launch_reranker.sh`.
 
-### 4. sglang LLM server (optional - only for a local LLM)
-Not scripted here - follow the official docs:
-**https://docs.sglang.ai/** (install into its own env). kg4vd expects an
-OpenAI-compatible server. `scripts/launch_qwen36_sglang.sh` is an example
-launcher for the model used in our experiments. If you use a remote API
-(OpenRouter/OpenAI), you do not need sglang.
+### 4. LLM backend
+
+sglang is not required. KG4VD can use:
+
+- OpenRouter, the default in the provided recipes.
+- OpenAI, by setting the recipe LLM kind to `openai` and providing `OPENAI_API_KEY`.
+- A local OpenAI-compatible server such as sglang.
+
+For local sglang, follow the official docs:
+**https://docs.sglang.ai/** (install into its own env). `scripts/launch_qwen36_sglang.sh`
+is an example launcher for the model used in our experiments.
 
 ## Environment variables (`.env`)
 
 `cp .env.example .env`, then set:
-- `OPENROUTER_API_KEY` - LLM provider for extract/align/augment/generation (unless `LLM=sglang`).
+- `OPENROUTER_API_KEY` or `OPENAI_API_KEY` - depending on the remote LLM backend.
 - `MINERU_PYTHON` - path to the MinerU env's python (ingest).
 - `KG4VD_RERANKER_URL` - optional; defaults to `http://127.0.0.1:8003`.
+
+Local sglang does not require an API key, but it does require a separately
+installed local LLM server.
 
 ## Which envs do I actually need?
 
 | Task | Needs |
 |---|---|
-| `kg4vd build` (OpenRouter LLM) | `kg4vd` + `mineru` + `OPENROUTER_API_KEY` |
-| `kg4vd build` (`LLM=sglang`) | `kg4vd` + `mineru` + sglang |
-| `kg4vd query` (QGGE, OpenRouter) | `kg4vd` + `OPENROUTER_API_KEY` |
-| `kg4vd query` (reranker on / local LLM) | `kg4vd` + `kg4vd_reranker` and/or sglang |
+| `kg4vd build` with OpenRouter or OpenAI | `kg4vd` + `mineru` + the matching API key |
+| `kg4vd build` with local sglang | `kg4vd` + `mineru` + sglang |
+| `kg4vd query` with OpenRouter or OpenAI | `kg4vd` + the matching API key |
+| `kg4vd query` with reranker or local sglang | `kg4vd` + `kg4vd_reranker` and/or sglang |
 
 The query path auto-starts/stops the reranker + sglang servers (`--no-manage-*`
-to run them yourself).
+to run them yourself) only when those local services are enabled.
 
 ## Tested Setup
 

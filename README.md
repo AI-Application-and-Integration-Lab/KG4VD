@@ -22,7 +22,7 @@ then using graph-guided retrieval to support document-level VQA.
 ## Installation
 
 KG4VD uses separate environments because MinerU, GME-Qwen2-VL, the reranker,
-and local LLM serving stacks require incompatible dependencies.
+and optional local LLM serving stacks require incompatible dependencies.
 
 ```bash
 bash scripts/setup_envs.sh
@@ -31,6 +31,11 @@ conda run -n kg4vd kg4vd --help
 ```
 
 See [INSTALL.md](INSTALL.md) for the full environment matrix and manual setup.
+
+KG4VD does not require sglang. The LLM backend can be OpenRouter, OpenAI, or a
+local OpenAI-compatible server such as sglang. OpenRouter is the default setup
+used by the provided recipes; sglang is only needed if you want to run a local
+LLM server.
 
 ## Quick Start
 
@@ -59,7 +64,7 @@ For scripted builds:
 
 ```bash
 bash scripts/build_mmkg.sh test
-LLM=sglang bash scripts/build_mmkg.sh test
+LLM=sglang bash scripts/build_mmkg.sh test   # optional local LLM
 ```
 
 ## DLVQA
