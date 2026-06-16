@@ -16,9 +16,8 @@ MEM_FRACTION="${QWEN36_MEM_FRACTION:-0.82}"
 # HF_HOME root makes sglang miss the cached snapshot and re-download.
 DOWNLOAD_DIR="${QWEN36_DOWNLOAD_DIR:-$HF_HOME/hub}"
 LOG_LEVEL="${QWEN36_LOG_LEVEL:-info}"
-# Blackwell (RTX 5090, sm_120) + CUDA 13: the default flashinfer attention
-# backend hangs at startup ("using attn output gate!", server never serves).
-# Override when another attention backend is preferred.
+# Some hardware/backend combinations need a different attention backend.
+# Triton is the tested default for our local setup.
 ATTN_BACKEND="${QWEN36_ATTN_BACKEND:-triton}"
 # flashinfer's sampling kernel JIT-compiles at first inference and fails to
 # link (`ld: cannot find -lcuda` under the conda toolchain), crashing the
@@ -41,6 +40,7 @@ PORT="${QWEN36_PORT:-8004}"
 
 export HF_HOME                       # already set by paths.sh; survive conda activate
 export HUGGINGFACE_HUB_CACHE="${HUGGINGFACE_HUB_CACHE:-$HF_HOME/hub}"
+# Override this if local kernel builds need a different GPU architecture.
 export TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST:-12.0}"
 
 python -m sglang.launch_server \

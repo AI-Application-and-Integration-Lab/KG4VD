@@ -14,7 +14,7 @@ pinned stack. The query path / `tuning/experiments` reach it over HTTP via
 conda create -n kg4vd_reranker python=3.10 -y
 conda activate kg4vd_reranker
 pip install torch==2.8.0 torchvision==0.23.0 \
-    --index-url https://download.pytorch.org/whl/cu128   # cu128: RTX 5090 / sm_120
+    --index-url <your-pytorch-wheel-index>
 pip install -r services/reranker/requirements.txt
 ```
 

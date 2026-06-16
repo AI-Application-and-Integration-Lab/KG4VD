@@ -3,10 +3,11 @@
 #
 #   conda create -n mineru python=3.10 -y
 #   conda run -n mineru pip install torch torchvision \
-#       --index-url https://download.pytorch.org/whl/cu128   # cu128+: RTX 5090 / sm_120
+#       --index-url <your-pytorch-wheel-index>
 #   conda run -n mineru pip install -r services/mineru/requirements.txt
 #
-# torch + torchvision MUST be installed first from the PyTorch CUDA wheel index.
+# torch + torchvision MUST be installed first from a compatible PyTorch CUDA
+# wheel index.
 # `uv pip install` works too and is much faster than pip.
 
 # Pipeline backend (layout analysis -> middle.json), matching the construction

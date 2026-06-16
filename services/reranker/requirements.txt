@@ -4,13 +4,11 @@
 #   conda create -n kg4vd_reranker python=3.10 -y
 #   conda activate kg4vd_reranker
 #   pip install torch==2.8.0 torchvision==0.23.0 \
-#       --index-url https://download.pytorch.org/whl/cu128
+#       --index-url <your-pytorch-wheel-index>
 #   pip install -r services/reranker/requirements.txt
 #
 # torch + torchvision MUST be installed first from the PyTorch CUDA wheel
-# index. Use cu128 (or newer): RTX 5090 / Blackwell needs sm_120 kernels,
-# which only ship in cu128+ (cu126 maxes at sm_90 and crashes with
-# "no kernel image is available for execution on the device").
+# index. Choose a wheel index compatible with your driver and CUDA runtime.
 
 transformers>=4.57.0
 qwen-vl-utils>=0.0.14

@@ -9,7 +9,7 @@
 # Knobs (env vars):
 #   CONDA_BASE   conda install root (default: scripts/paths.sh / `conda info --base`)
 #   KG4VD_ENV / MINERU_ENV / RERANKER_ENV    env names
-#   TORCH_INDEX  torch wheel index (default cu128 - needed for RTX 5090 / sm_120)
+#   TORCH_INDEX  torch wheel index matching your CUDA/driver setup
 #   PYVER        python version for new envs (default 3.10)
 #   RECREATE=1   conda env remove + recreate even if it exists
 set -euo pipefail
@@ -20,6 +20,7 @@ cd "$REPO_ROOT"
 # shellcheck source=scripts/paths.sh
 source "$(dirname "$0")/paths.sh"   # CONDA_BASE + env names (KG4VD_ENV/MINERU_ENV/RERANKER_ENV)
 CONDA="$CONDA_BASE/bin/conda"
+# Default matches the setup used in our experiments. Override for your CUDA stack.
 TORCH_INDEX="${TORCH_INDEX:-https://download.pytorch.org/whl/cu128}"
 PYVER="${PYVER:-3.10}"
 

@@ -17,8 +17,8 @@ and a local LLM is reached through an OpenAI-compatible endpoint.
 ## Prerequisites
 
 - Conda / Miniconda.
-- An NVIDIA GPU + recent CUDA. On Blackwell (RTX 5090, sm_120) install torch
-  from the **cu128+** wheel index (cu126 lacks sm_120 kernels).
+- An NVIDIA GPU for the GME encoder and optional local model services.
+- A PyTorch wheel index that matches your GPU driver and CUDA runtime.
 
 ## Quick start (automated)
 
@@ -33,8 +33,8 @@ bash scripts/setup_envs.sh reranker
 ```
 
 Knobs (env vars): `CONDA_BASE`, `KG4VD_ENV` / `MINERU_ENV` / `RERANKER_ENV`
-(env names), `TORCH_INDEX` (default `https://download.pytorch.org/whl/cu128`),
-`PYVER` (default `3.10`).
+(env names), `TORCH_INDEX` (PyTorch wheel index), `PYVER` (default `3.10`).
+Override `TORCH_INDEX` if your CUDA setup needs a different PyTorch build.
 
 Then configure and verify the CLI:
 
@@ -49,7 +49,7 @@ conda run -n kg4vd kg4vd --help
 ```bash
 conda create -n kg4vd python=3.10 -y
 conda run -n kg4vd pip install torch torchvision \
-    --index-url https://download.pytorch.org/whl/cu128
+    --index-url <your-pytorch-wheel-index>
 conda run -n kg4vd pip install -e '.[gme,viz,dev]'
 ```
 
@@ -57,7 +57,7 @@ conda run -n kg4vd pip install -e '.[gme,viz,dev]'
 ```bash
 conda create -n mineru python=3.10 -y
 conda run -n mineru pip install torch torchvision \
-    --index-url https://download.pytorch.org/whl/cu128
+    --index-url <your-pytorch-wheel-index>
 conda run -n mineru pip install -r services/mineru/requirements.txt
 ```
 See [`services/mineru/README.md`](./services/mineru/README.md). Point ingest at
@@ -67,7 +67,7 @@ this env with `MINERU_PYTHON=<conda>/envs/mineru/bin/python`.
 ```bash
 conda create -n kg4vd_reranker python=3.10 -y
 conda run -n kg4vd_reranker pip install torch==2.8.0 torchvision==0.23.0 \
-    --index-url https://download.pytorch.org/whl/cu128
+    --index-url <your-pytorch-wheel-index>
 conda run -n kg4vd_reranker pip install -r services/reranker/requirements.txt
 ```
 See [`services/reranker/README.md`](./services/reranker/README.md). Launch with
@@ -98,3 +98,15 @@ launcher for the model used in our experiments. If you use a remote API
 
 The query path auto-starts/stops the reranker + sglang servers (`--no-manage-*`
 to run them yourself).
+
+## Tested Setup
+
+Our experiments were tested on NVIDIA RTX 5090 GPUs. For this setup, we used
+PyTorch CUDA 12.8 wheels:
+
+```bash
+export TORCH_INDEX=https://download.pytorch.org/whl/cu128
+```
+
+Other NVIDIA GPUs may require a different PyTorch wheel index. Choose the wheel
+that matches your driver and CUDA runtime.
