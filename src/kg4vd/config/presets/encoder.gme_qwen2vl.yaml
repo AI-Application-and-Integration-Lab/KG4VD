@@ -1,0 +1,15 @@
+# Production encoder preset.
+#   pip install "kg4vd[gme]"
+
+encoder:
+  name: gme_qwen2vl
+  model: Alibaba-NLP/gme-Qwen2-VL-7B-Instruct
+  dim: 3584
+  normalize: true
+  extra:
+    torch_dtype: float16
+    max_image_long_side: 1024
+
+index:
+  backend: nano
+  metric: cosine

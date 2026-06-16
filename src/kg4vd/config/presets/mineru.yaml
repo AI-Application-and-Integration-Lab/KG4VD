@@ -1,0 +1,39 @@
+# Overlay preset: MinerU layout parsing + visual entity fusion.
+#
+# The KG extractor is component-cued: it requires MinerU-style layout
+# components on each page. This overlay wires that in (and the visual-crop
+# fusion that goes with it). Apply on top of base + encoder + LLM +
+# profile.<type>, e.g.
+#
+#   extends:
+#     - presets/base.yaml
+#     - presets/encoder.gme_qwen2vl.yaml
+#     - presets/llm.openrouter.gpt4omini.yaml
+#     - presets/profile.slides.yaml
+#     - presets/mineru.yaml          # <-- LAST so it wins
+#
+# Prereqs:
+#   - MinerU installed in a separate conda env (see scripts/build_mmkg.sh
+#     for how MINERU_PATH is wired).
+#   - A multimodal encoder (gme_qwen2vl) - text-only encoders won't
+#     consume the JPEG crops emitted by the visual-crop fusion.
+#
+# What this overlay does:
+#   1. ingest.parser: pypdfium → mineru   (the layout components the
+#                     extractor needs; pypdfium produces none)
+#   2. ingest.output_subdir: "dumps"      (mineru artefact location)
+#   3. evidence_cards.entity_card.use_visual_crop: visual entity fusion.
+
+ingest:
+  parser: mineru
+  dpi: 300
+  jpeg_quality: 90
+  max_image_long_side: 2048
+  output_subdir: dumps
+
+evidence_cards:
+  entity_card:
+    use_visual_crop: true        # visual entity fusion (gated on visual modality)
+    crop_padding_frac: 0.06
+    crop_min_area_px: 3600
+    crop_max_long_side: 768

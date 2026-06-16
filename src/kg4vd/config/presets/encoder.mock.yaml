@@ -1,0 +1,11 @@
+# Deterministic mock encoder - no GPU, no network. Use for unit / integration
+# tests and CI smoke runs.
+
+encoder:
+  name: mock
+  dim: 256
+  normalize: true
+
+index:
+  backend: nano
+  metric: cosine

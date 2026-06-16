@@ -1,0 +1,126 @@
+dataset:
+  name: test
+  data_dir: ./recipes/test/data
+  work_dir: ./recipes/test/exp
+ingest:
+  parser: mineru
+  dpi: 300
+  jpeg_quality: 90
+  max_image_long_side: 2048
+  output_subdir: dumps
+augment:
+  page_summary:
+    enabled: true
+    llm: default
+    max_tokens: 1024
+    temperature: 0.0
+kg:
+  # Vocab tuned to cover MMLongBench-Doc's seven document types:
+  #   Res. (Research report)  Tut. (Tutorial)  Acad. (Academic paper)
+  #   Guid. (Guidebook)       Broch. (Brochure)
+  #   Admin. (Administration) Fin. (Financial report)
+  #
+  # Heavier on quantitative / tabular entity types because most factoid
+  # answers are numbers/labels pulled from Tables, Charts, Figures.
+  entity_types:
+  - person
+  - organization
+  - group
+  - location
+  - event
+  - date
+  - work_of_art
+  - product
+  - scientific_concept
+  - chapter
+  - section
+  - unit
+  - assessment_type
+  visual_entity_types:
+  - visual_object
+  - chart_element
+  - diagram_component
+  - table_region
+  - layout_region
+  - figure_panel
+  extract:
+    llm: default
+    skip_empty_pages: true
+    max_rounds: 5
+    max_empty_revisions: 2
+    saturation:
+      enabled: true
+      density_guard_min_chars: 200
+      density_guard_min_nodes: 3
+  description_merge: concat_sep
+  description_max_chars: 4000
+cross_page_alignment:
+  enabled: true
+  candidate_top_k: 10
+  rs_threshold: 9.0
+  rs_threshold_same_as: 9.0
+  rs_threshold_rescue: 7.0
+  rs_threshold_cross_modality: 8.0
+  judge_llm: default
+  canonicalize_same_as: true
+evidence_cards:
+  emit:
+    page: true
+    entity: true
+    relation: true
+  entity_card:
+    use_visual_crop: true
+    crop_padding_frac: 0.06
+    crop_min_area_px: 3600
+    crop_max_long_side: 768
+encoder:
+  name: gme_qwen2vl
+  model: Alibaba-NLP/gme-Qwen2-VL-7B-Instruct
+  dim: 3584
+  normalize: true
+  extra:
+    torch_dtype: float16
+    max_image_long_side: 1024
+index:
+  backend: nano
+  metric: cosine
+generator:
+  # Local SGLang server (Qwen3.6 MoE FP8). Start it first:
+  #   bash scripts/launch_qwen36_sglang.sh        # http://127.0.0.1:8004/v1
+  # No API key needed; thinking is turned OFF (reasoning tokens make
+  # extraction crawl) via extra_body.chat_template_kwargs.
+  llm:
+    kind: sglang
+    model: Qwen/Qwen3.6-35B-A3B-FP8
+    base_url: http://127.0.0.1:8004/v1
+    api_key_env: ""
+    timeout_s: 300
+    max_retries: 5
+    extra:
+      chat_template_kwargs:
+        enable_thinking: false
+obs:
+  tracer: both
+  trace_path: trace.jsonl
+  manifest_path: run_manifest.json
+  rich_progress: true
+runtime:
+  max_async:
+    extract: 16
+    align: 16
+    embed: 8
+query:
+  # Graph propagation: "qgge" (default; uses only the index) or "ppr"
+  # (personalized PageRank over kg/retrieval_graph.json - build that stage first).
+  propagation: qgge
+  retrieval:
+    anchor_size: 40
+  qgge:
+    rounds: 2
+    page_beam: 50
+    lambda_page: 0.7
+  # Optional Qwen3-VL reranker (services/reranker). Off by default so a quick
+  # test only needs the LLM; enable it + start scripts/launch_reranker.sh to try.
+  reranker:
+    enabled: true
+prompt_set_version: kg4vd-v1.0.0

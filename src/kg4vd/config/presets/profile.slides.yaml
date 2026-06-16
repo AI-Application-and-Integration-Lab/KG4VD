@@ -1,0 +1,28 @@
+# Document-type profile: COURSE / LECTURE SLIDES.
+# Each "page" is a slide: short text (titles, bullets), often a
+# diagram or screenshot, occasional code blocks. Sequential narrative
+# but each slide is largely self-contained.
+#
+# Distinct from textbook: smaller chunks, fewer cross-page entities,
+# page-level retrieval matters more (the slide IS the unit), and the
+# vocabulary tilts toward instructional / conceptual terms.
+#
+# Visual entity types intentionally inherit the canonical 6 from the
+# schema default. Subtype detail (screenshot of a UI, code block,
+# text-rendered diagram) goes in visual_description text -- the type
+# vocabulary stays small and reusable across decks.
+
+kg:
+  entity_types:
+    [person, organization, location, event, date,
+     work_of_art, product, scientific_concept,
+     # generic slide-deck structure
+     concept, term, slide_title, agenda_item, code_snippet, citation,
+     # ML / CV / DL course vocabulary (DLCV-style decks)
+     course_code, lecture_topic, dataset, model_architecture,
+     task_type, metric, benchmark, framework, algorithm,
+     paper_citation]
+  # visual_entity_types: inherits the canonical 6 from the schema
+
+evidence_cards:
+  chunk_max_tokens: 600            # smaller per-slide chunks

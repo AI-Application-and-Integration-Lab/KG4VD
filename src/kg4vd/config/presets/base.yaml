@@ -1,0 +1,58 @@
+# Base recipe defaults. Most KG4VD recipes start with:
+#   extends:
+#     - presets/base.yaml
+
+ingest:
+  parser: pypdfium
+  dpi: 300
+  jpeg_quality: 90
+  max_image_long_side: 2048
+
+augment:
+  page_summary:
+    enabled: true
+    max_tokens: 1024
+    temperature: 0.0
+
+kg:
+  extract:
+    max_rounds: 5
+    max_empty_revisions: 2
+    skip_empty_pages: true
+    saturation:
+      enabled: true
+      density_guard_min_chars: 200
+      density_guard_min_nodes: 3
+  description_merge: concat_sep
+  description_max_chars: 4000
+
+cross_page_alignment:
+  enabled: true
+  candidate_top_k: 20
+  # Strong-keep threshold: cross-page "related" edges with rs >= 9
+  # (conf >= 0.9) are always retained.
+  rs_threshold: 9.0
+  # Rescue floor: edges with rs in [7, 9) are kept ONLY if they meet
+  # one of the rescue conditions (bridge / cross-modality / surface-
+  # grounded). Below 7: dropped outright.
+  rs_threshold_rescue: 7.0
+  # Stricter floor for cross-modality (visual ↔ text) rescues.
+  rs_threshold_cross_modality: 8.0
+
+evidence_cards:
+  emit:
+    page: true
+    entity: true
+    relation: true
+
+obs:
+  tracer: both
+  trace_path: trace.jsonl
+  manifest_path: run_manifest.json
+  rich_progress: true
+
+runtime:
+  max_async:
+    extract: 12
+    align: 12
+    embed: 16

@@ -1,0 +1,14 @@
+# MinerU 3.x ingest env - install in its own conda env (python 3.10-3.12),
+# separate from the kg4vd / GME env (MinerU needs transformers>=4.57.3).
+#
+#   conda create -n mineru python=3.10 -y
+#   conda run -n mineru pip install torch torchvision \
+#       --index-url https://download.pytorch.org/whl/cu128   # cu128+: RTX 5090 / sm_120
+#   conda run -n mineru pip install -r services/mineru/requirements.txt
+#
+# torch + torchvision MUST be installed first from the PyTorch CUDA wheel index.
+# `uv pip install` works too and is much faster than pip.
+
+# Pipeline backend (layout analysis -> middle.json), matching the construction
+# pipeline. Use mineru[all] instead to also pull the VLM backend / vllm.
+mineru[pipeline]>=3.1,<4

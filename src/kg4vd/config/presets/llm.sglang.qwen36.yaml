@@ -1,0 +1,23 @@
+# Local SGLang server (Qwen3.6 MoE FP8) - cheap/offline development & testing.
+#
+# Start the server first (concurrency handles ~16):
+#   bash scripts/launch_qwen36_sglang.sh
+#
+# The server is OpenAI-compatible at http://127.0.0.1:8004/v1 and needs no
+# API key. To saturate it, bump the build stages' async caps to ~16:
+#   runtime.max_async.extract / align : 16
+generator:
+  llm:
+    kind: sglang
+    model: Qwen/Qwen3.6-35B-A3B-FP8
+    base_url: http://127.0.0.1:8004/v1
+    api_key_env: ""          # local server - no key needed
+    timeout_s: 300
+    max_retries: 5
+    # Qwen3.6 is a reasoning model with thinking ON by default - that makes
+    # KG extraction crawl (thousands of reasoning tokens per call). The
+    # extractor wants structured JSON, not chain-of-thought, so turn it off.
+    # Forwarded to sglang as extra_body.chat_template_kwargs.
+    extra:
+      chat_template_kwargs:
+        enable_thinking: false

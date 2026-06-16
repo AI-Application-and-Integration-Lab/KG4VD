@@ -1,0 +1,60 @@
+# build / packaging
+*.egg-info/
+build/
+dist/
+.eggs/
+__pycache__/
+*.py[cod]
+*.so
+
+# virtualenv
+.venv/
+venv/
+env/
+
+# secrets / env
+.env
+env.sh
+.envrc
+
+# build artefacts (work_dir + MinerU dumps; regeneratable). These match dirs
+# named exp/ or dumps/ at any depth.
+exp/
+dumps/
+
+# Only the `test` recipe is tracked — a tiny end-to-end example so a fresh clone
+# can verify the system works. Every other recipe (its data incl. large PDFs,
+# build artifacts, eval results, logs) stays local.
+recipes/*
+!recipes/test/
+!recipes/test/**
+# ...but never the test recipe's generated artifacts (re-excluded after the
+# re-include above; order matters in .gitignore):
+recipes/test/exp/
+recipes/test/dumps/
+recipes/test/inspect/
+recipes/test/*.log
+recipes/test/answers*.jsonl
+
+# datasets/ - track benchmark definitions and README files. Large source PDFs
+# stay local unless explicitly added outside the normal ignore rules.
+datasets/**/*.pdf
+
+# logs / traces
+logs/
+*.jsonl.gz
+
+# tests / type / lint caches
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# editor / OS
+.DS_Store
+.vscode/
+.idea/
+.ipynb_checkpoints/
+tuning/results/
+.tmp

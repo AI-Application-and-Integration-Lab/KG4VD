@@ -1,0 +1,87 @@
+# KG4VD
+
+Code and dataset release for **Multimodal Graph RAG for Long-range Visually Rich
+Document Understanding**.
+
+KG4VD is a multimodal graph-based retrieval-augmented generation framework for
+long, visually rich documents. It builds a multimodal knowledge graph (MMKG)
+from document pages, indexes graph-grounded evidence, and answers questions by
+combining page retrieval with graph-based evidence propagation.
+
+The repository also releases **DLVQA**, a document-level visual question
+answering benchmark designed for global, holistic document understanding.
+
+Long visual documents are difficult for MLLMs because page images, OCR text,
+figures, tables, and cross-page dependencies quickly exceed the context window.
+Page-level MMRAG helps by retrieving relevant pages, but it is less effective
+for questions requiring document-level synthesis.
+
+KG4VD addresses this by constructing MMKGs over textual and visual entities,
+then using graph-guided retrieval to support document-level VQA.
+
+## Installation
+
+KG4VD uses separate environments because MinerU, GME-Qwen2-VL, the reranker,
+and local LLM serving stacks require incompatible dependencies.
+
+```bash
+bash scripts/setup_envs.sh
+cp .env.example .env
+conda run -n kg4vd kg4vd --help
+```
+
+See [INSTALL.md](INSTALL.md) for the full environment matrix and manual setup.
+
+## Quick Start
+
+Build the test recipe:
+
+```bash
+conda run -n kg4vd kg4vd build recipes/test/recipe.yaml --resume
+```
+
+Query a built index:
+
+```bash
+kg4vd query recipes/test/recipe.yaml -q "Your question"
+kg4vd query-batch recipes/test/recipe.yaml -i recipes/test/questions.jsonl
+```
+
+Inspect a run:
+
+```bash
+kg4vd show-config recipes/test/recipe.yaml
+kg4vd report recipes/test/recipe.yaml --kind per_stage
+python scripts/inspect_run.py recipes/test/exp --page 1
+```
+
+For scripted builds:
+
+```bash
+bash scripts/build_mmkg.sh test
+LLM=sglang bash scripts/build_mmkg.sh test
+```
+
+## DLVQA
+
+DLVQA is a document-level VQA benchmark for questions that require global
+document comprehension. Each example includes a reference answer, supporting
+facts, topic outline, page span, and answer format.
+
+The released benchmark contains 525 questions over four long documents. See
+[datasets/dlvqa/README.md](datasets/dlvqa/README.md) for the schema and
+document-level details.
+
+## Development
+
+```bash
+conda run -n kg4vd ruff check src scripts services
+conda run -n kg4vd python -m pytest -q
+```
+
+Some tests and workflows require the optional service environments described in
+[INSTALL.md](INSTALL.md).
+
+## License
+
+See [LICENSE](LICENSE).

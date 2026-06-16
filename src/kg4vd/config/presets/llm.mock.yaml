@@ -1,0 +1,8 @@
+# Mock LLM - deterministic stub answers. Use for unit tests and CI.
+generator:
+  llm:
+    kind: mock
+    model: mock-llm
+    api_key_env: MOCK_API_KEY
+    timeout_s: 30
+    max_retries: 1

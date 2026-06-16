@@ -1,0 +1,9 @@
+# OpenRouter routing to GPT-4o-mini (cheap default for development).
+generator:
+  llm:
+    kind: openrouter
+    model: openai/gpt-4o-mini
+    base_url: https://openrouter.ai/api/v1
+    api_key_env: OPENROUTER_API_KEY
+    timeout_s: 300
+    max_retries: 5
