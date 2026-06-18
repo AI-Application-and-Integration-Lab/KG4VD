@@ -25,10 +25,9 @@ kg4vd --help
 
 See [INSTALL.md](INSTALL.md) for the full environment matrix and manual setup.
 
-KG4VD does not require sglang. The LLM backend can be OpenRouter, OpenAI, or a
-local OpenAI-compatible server such as sglang. OpenRouter is the default setup
-used by the provided recipes; sglang is only needed if you want to run a local
-LLM server.
+The LLM backend can be OpenRouter, OpenAI, or a local OpenAI-compatible server
+such as sglang. OpenRouter is the default setup used by the provided recipes;
+sglang is only needed if you want to run a local LLM server.
 
 ## Quick Start
 
