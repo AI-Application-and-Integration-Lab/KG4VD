@@ -114,6 +114,32 @@ cross_page_alignment:
   judge_llm: default
 ```
 
+To use a different LLM for one stage, write `<kind>:<model>`:
+
+```yaml
+augment:
+  page_summary:
+    llm: openrouter:openai/gpt-4o-mini
+
+kg:
+  extract:
+    llm: openai:gpt-4o-mini
+
+cross_page_alignment:
+  judge_llm: sglang:Qwen/Qwen3.6-35B-A3B-FP8
+```
+
+If only a model name is provided, KG4VD treats it as an OpenRouter model:
+
+```yaml
+kg:
+  extract:
+    llm: openai/gpt-4o-mini
+```
+
+Supported stage-specific `kind` values are `openrouter`, `openai`, `sglang`,
+`vllm`, and `mock`.
+
 ## KG Extraction
 
 ```yaml
