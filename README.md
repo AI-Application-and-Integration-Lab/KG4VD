@@ -19,6 +19,8 @@ The released benchmark contains 525 questions over four long documents. See
 [datasets/dlvqa/README.md](datasets/dlvqa/README.md) for the schema and
 document-level details.
 
+![KG4VD overview](doc/KG4VD.png)
+
 ## Installation
 
 KG4VD uses separate environments because MinerU, GME-Qwen2-VL, the reranker,
