@@ -232,11 +232,11 @@ query:
 
 Available query options:
 
-| Field | Values |
-|---|---|
-| `query.propagation` | `qgge`, `ppr` |
-| `query.answer.mode` | `auto`, `images`, `texts`, `fusion` |
-| `query.reranker.enabled` | `true`, `false` |
+| Field | Values | Notes |
+|---|---|---|
+| `query.propagation` | `qgge`, `ppr` | `qgge` = Query-Guided Graph Expansion. `ppr` = Personalized PageRank. |
+| `query.answer.mode` | `auto`, `images`, `texts`, `fusion` | Answer context format. |
+| `query.reranker.enabled` | `true`, `false` | Enables the optional Qwen3-VL reranker service. |
 
 Use `ppr` only after building the optional `retrieval_graph` stage.
 
