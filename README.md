@@ -11,14 +11,6 @@ combining page retrieval with graph-based evidence propagation.
 The repository also releases **DLVQA**, a document-level visual question
 answering benchmark designed for global, holistic document understanding.
 
-Long visual documents are difficult for MLLMs because page images, OCR text,
-figures, tables, and cross-page dependencies quickly exceed the context window.
-Page-level MMRAG helps by retrieving relevant pages, but it is less effective
-for questions requiring document-level synthesis.
-
-KG4VD addresses this by constructing MMKGs over textual and visual entities,
-then using graph-guided retrieval to support document-level VQA.
-
 ## Installation
 
 KG4VD uses separate environments because MinerU, GME-Qwen2-VL, the reranker,
