@@ -62,8 +62,8 @@ LLM=sglang bash scripts/build_mmkg.sh test   # optional local LLM
 ## DLVQA
 
 DLVQA is a document-level VQA benchmark for questions that require global
-document comprehension. Each example includes a reference answer, supporting
-facts, topic outline, page span, and answer format.
+document comprehension. Each example includes answer guidance, a reference
+summary, and supporting facts.
 
 The released benchmark contains 525 questions over four long documents. See
 [datasets/dlvqa/README.md](datasets/dlvqa/README.md) for the schema and
