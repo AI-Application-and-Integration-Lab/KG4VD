@@ -227,7 +227,7 @@ query:
     page_beam: 50
     lambda_page: 0.7
   reranker:
-    enabled: false
+    enabled: true
 ```
 
 Available query options:
