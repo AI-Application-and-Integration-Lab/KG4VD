@@ -2,9 +2,10 @@
 # separate from the kg4vd / GME env (MinerU needs transformers>=4.57.3).
 #
 #   conda create -n mineru python=3.10 -y
-#   conda run -n mineru pip install torch torchvision \
+#   conda activate mineru
+#   pip install torch torchvision \
 #       --index-url <your-pytorch-wheel-index>
-#   conda run -n mineru pip install -r services/mineru/requirements.txt
+#   pip install -r services/mineru/requirements.txt
 #
 # torch + torchvision MUST be installed first from a compatible PyTorch CUDA
 # wheel index.

@@ -45,8 +45,9 @@ Scores are sigmoid-activated to `[0, 1]`.
 ## Parity check
 
 ```bash
-conda run -n kg4vd_reranker python services/reranker/test_parity.py --mode direct
-conda run -n kg4vd_reranker python services/reranker/test_parity.py --mode http
+conda activate kg4vd_reranker
+python services/reranker/test_parity.py --mode direct
+python services/reranker/test_parity.py --mode http
 ```
 
 Asserts the model-card reference scores (±0.05) and the published ranking.

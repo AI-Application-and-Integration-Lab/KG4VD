@@ -46,7 +46,7 @@ setup_kg4vd () {
     ensure_env "$KG4VD_ENV"
     pip_in "$KG4VD_ENV" install torch torchvision --index-url "$TORCH_INDEX"
     pip_in "$KG4VD_ENV" install -e '.[gme,viz,dev]'
-    echo "[setup] kg4vd done. Smoke: conda run -n $KG4VD_ENV kg4vd --help"
+    echo "[setup] kg4vd done. Smoke: conda activate $KG4VD_ENV && kg4vd --help"
 }
 
 setup_mineru () {
@@ -78,7 +78,8 @@ cat <<EOF
 
 Done ($target). Next:
   cp .env.example .env        # fill OPENROUTER_API_KEY, MINERU_PYTHON
-  conda run -n $KG4VD_ENV python -m pytest -q
+  conda activate $KG4VD_ENV
+  python -m pytest -q
 
 The sglang LLM server (optional, local LLM) installs separately - see
 https://docs.sglang.ai/ and scripts/launch_qwen36_sglang.sh. With a remote API

@@ -42,6 +42,7 @@ Output (backend=pipeline, parse_method=auto), consumed unchanged by the parser:
 ## Run directly
 
 ```bash
-conda run -n mineru python services/mineru/run.py \
+conda activate mineru
+python services/mineru/run.py \
     --pdf doc.pdf --out /tmp/out --lang en
 ```

@@ -40,7 +40,8 @@ Then configure and verify the CLI:
 
 ```bash
 cp .env.example .env        # fill OPENROUTER_API_KEY, MINERU_PYTHON, ...
-conda run -n kg4vd kg4vd --help
+conda activate kg4vd
+kg4vd --help
 ```
 
 ## Manual install (per env)
@@ -48,17 +49,19 @@ conda run -n kg4vd kg4vd --help
 ### 1. `kg4vd` - core + GME encoder
 ```bash
 conda create -n kg4vd python=3.10 -y
-conda run -n kg4vd pip install torch torchvision \
+conda activate kg4vd
+pip install torch torchvision \
     --index-url <your-pytorch-wheel-index>
-conda run -n kg4vd pip install -e '.[gme,viz,dev]'
+pip install -e '.[gme,viz,dev]'
 ```
 
 ### 2. `mineru` - MinerU 3.x ingest
 ```bash
 conda create -n mineru python=3.10 -y
-conda run -n mineru pip install torch torchvision \
+conda activate mineru
+pip install torch torchvision \
     --index-url <your-pytorch-wheel-index>
-conda run -n mineru pip install -r services/mineru/requirements.txt
+pip install -r services/mineru/requirements.txt
 ```
 See [`services/mineru/README.md`](./services/mineru/README.md). Point ingest at
 this env with `MINERU_PYTHON=<conda>/envs/mineru/bin/python`.
@@ -66,9 +69,10 @@ this env with `MINERU_PYTHON=<conda>/envs/mineru/bin/python`.
 ### 3. `kg4vd_reranker` - reranker service (optional, query only)
 ```bash
 conda create -n kg4vd_reranker python=3.10 -y
-conda run -n kg4vd_reranker pip install torch==2.8.0 torchvision==0.23.0 \
+conda activate kg4vd_reranker
+pip install torch==2.8.0 torchvision==0.23.0 \
     --index-url <your-pytorch-wheel-index>
-conda run -n kg4vd_reranker pip install -r services/reranker/requirements.txt
+pip install -r services/reranker/requirements.txt
 ```
 See [`services/reranker/README.md`](./services/reranker/README.md). Launch with
 `bash scripts/launch_reranker.sh`.

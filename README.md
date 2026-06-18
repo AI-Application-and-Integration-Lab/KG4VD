@@ -19,7 +19,8 @@ and optional local LLM serving stacks require incompatible dependencies.
 ```bash
 bash scripts/setup_envs.sh
 cp .env.example .env
-conda run -n kg4vd kg4vd --help
+conda activate kg4vd
+kg4vd --help
 ```
 
 See [INSTALL.md](INSTALL.md) for the full environment matrix and manual setup.
@@ -34,7 +35,8 @@ LLM server.
 Build the test recipe:
 
 ```bash
-conda run -n kg4vd kg4vd build recipes/test/recipe.yaml --resume
+conda activate kg4vd
+kg4vd build recipes/test/recipe.yaml --resume
 ```
 
 Query a built index:
@@ -72,8 +74,9 @@ document-level details.
 ## Development
 
 ```bash
-conda run -n kg4vd ruff check src scripts services
-conda run -n kg4vd python -m pytest -q
+conda activate kg4vd
+ruff check src scripts services
+python -m pytest -q
 ```
 
 Some tests and workflows require the optional service environments described in
