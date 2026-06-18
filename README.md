@@ -11,6 +11,10 @@ combining page retrieval with graph-based evidence propagation.
 The repository also releases **DLVQA**, a document-level visual question
 answering benchmark designed for global, holistic document understanding.
 
+DLVQA is a document-level VQA benchmark for questions that require global
+document comprehension. Each example includes answer guidance, a reference
+summary, and supporting facts.
+
 ## Installation
 
 KG4VD uses separate environments because MinerU, GME-Qwen2-VL, the reranker,
@@ -61,10 +65,6 @@ LLM=sglang bash scripts/build_mmkg.sh test   # optional local LLM
 ```
 
 ## DLVQA
-
-DLVQA is a document-level VQA benchmark for questions that require global
-document comprehension. Each example includes answer guidance, a reference
-summary, and supporting facts.
 
 The released benchmark contains 525 questions over four long documents. See
 [datasets/dlvqa/README.md](datasets/dlvqa/README.md) for the schema and
