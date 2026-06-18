@@ -3,6 +3,8 @@
 Code and dataset release for **Multimodal Graph RAG for Long-range Visually Rich
 Document Understanding**.
 
+![KG4VD overview](doc/KG4VD.png)
+
 KG4VD is a multimodal graph-based retrieval-augmented generation framework for
 long, visually rich documents. It builds a multimodal knowledge graph (MMKG)
 from document pages, indexes graph-grounded evidence, and answers questions by
@@ -18,8 +20,6 @@ summary, and supporting facts.
 The released benchmark contains 525 questions over four long documents. See
 [datasets/dlvqa/README.md](datasets/dlvqa/README.md) for the schema and
 document-level details.
-
-![KG4VD overview](doc/KG4VD.png)
 
 ## Installation
 
