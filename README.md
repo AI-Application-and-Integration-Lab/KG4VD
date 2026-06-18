@@ -15,6 +15,10 @@ DLVQA is a document-level VQA benchmark for questions that require global
 document comprehension. Each example includes answer guidance, a reference
 summary, and supporting facts.
 
+The released benchmark contains 525 questions over four long documents. See
+[datasets/dlvqa/README.md](datasets/dlvqa/README.md) for the schema and
+document-level details.
+
 ## Installation
 
 KG4VD uses separate environments because MinerU, GME-Qwen2-VL, the reranker,
@@ -63,12 +67,6 @@ For scripted builds:
 bash scripts/build_mmkg.sh test
 LLM=sglang bash scripts/build_mmkg.sh test   # optional local LLM
 ```
-
-## DLVQA
-
-The released benchmark contains 525 questions over four long documents. See
-[datasets/dlvqa/README.md](datasets/dlvqa/README.md) for the schema and
-document-level details.
 
 ## Development
 
