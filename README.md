@@ -5,7 +5,7 @@ Document Understanding**.
 
 ![KG4VD overview](doc/KG4VD.png)
 
-KG4VD is a multimodal graph-based retrieval-augmented generation framework for
+MegaRAG2 is a multimodal graph-based retrieval-augmented generation framework for
 long, visually rich documents. It builds a multimodal knowledge graph (MMKG)
 from document pages, indexes graph-grounded evidence, and answers questions by
 combining page retrieval with graph-based evidence propagation.
@@ -23,14 +23,14 @@ document-level details.
 
 ## Installation
 
-KG4VD uses separate environments because MinerU, GME-Qwen2-VL, the reranker,
+MegaRAG2 uses separate environments because MinerU, GME-Qwen2-VL, the reranker,
 and optional local LLM serving stacks require incompatible dependencies.
 
 ```bash
 bash scripts/setup_envs.sh
 cp .env.example .env
-conda activate kg4vd
-kg4vd --help
+conda activate megarag2
+megarag2 --help
 ```
 
 See [INSTALL.md](INSTALL.md) for the full environment matrix and manual setup.
@@ -44,22 +44,22 @@ sglang is only needed if you want to run a local LLM server.
 Build the test recipe:
 
 ```bash
-conda activate kg4vd
-kg4vd build recipes/test/recipe.yaml --resume
+conda activate megarag2
+megarag2 build recipes/test/recipe.yaml --resume
 ```
 
 Query a built index:
 
 ```bash
-kg4vd query recipes/test/recipe.yaml -q "Your question"
-kg4vd query-batch recipes/test/recipe.yaml -i recipes/test/questions.jsonl
+megarag2 query recipes/test/recipe.yaml -q "Your question"
+megarag2 query-batch recipes/test/recipe.yaml -i recipes/test/questions.jsonl
 ```
 
 Inspect a run:
 
 ```bash
-kg4vd show-config recipes/test/recipe.yaml
-kg4vd report recipes/test/recipe.yaml --kind per_stage
+megarag2 show-config recipes/test/recipe.yaml
+megarag2 report recipes/test/recipe.yaml --kind per_stage
 python scripts/inspect_run.py recipes/test/exp --page 1
 ```
 
@@ -73,7 +73,7 @@ LLM=sglang bash scripts/build_mmkg.sh test   # optional local LLM
 ## Development
 
 ```bash
-conda activate kg4vd
+conda activate megarag2
 ruff check src scripts services
 python -m pytest -q
 ```
