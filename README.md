@@ -1,4 +1,4 @@
-# KG4VD
+# KG4VD (MegaRAG2)
 
 Code and dataset release for **Multimodal Graph RAG for Long-range Visually Rich
 Document Understanding**.
