@@ -1,17 +1,17 @@
-# Installing kg4vd
+# Installing megarag2
 
-kg4vd spans multiple environments because heavyweight model stacks have
+megarag2 spans multiple environments because heavyweight model stacks have
 mutually incompatible `transformers` pins and can't share one Python process:
 
 | Env | Purpose | Key constraint | Used by |
 |---|---|---|---|
-| **`kg4vd`** (main) | core pipeline + GME-Qwen2-VL encoder | `transformers<4.52` (GME remote code) | everything |
+| **`megarag2`** (main) | core pipeline + GME-Qwen2-VL encoder | `transformers<4.52` (GME remote code) | everything |
 | **`mineru`** | MinerU 3.x PDF ingest | `transformers>=4.57.3` | `build` (ingest stage) |
-| **`kg4vd_reranker`** | Qwen3-VL reranker HTTP service | `transformers>=4.57` | `query` (optional) |
+| **`megarag2_reranker`** | Qwen3-VL reranker HTTP service | `transformers>=4.57` | `query` (optional) |
 | **local LLM env** | OpenAI-compatible local LLM server, e.g. sglang | model-dependent | `build`/`query` with a local LLM (optional) |
 
 The model envs run out-of-process: ingest shells out to MinerU
-(`MINERU_PYTHON`), the reranker is reached over HTTP (`KG4VD_RERANKER_URL`),
+(`MINERU_PYTHON`), the reranker is reached over HTTP (`MegaRAG2_RERANKER_URL`),
 and optional local LLMs are reached through an OpenAI-compatible endpoint.
 
 ## Prerequisites
@@ -27,12 +27,12 @@ Creates the three managed conda envs and installs each:
 ```bash
 bash scripts/setup_envs.sh                 # core envs; local LLM -> see below
 # or one at a time:
-bash scripts/setup_envs.sh kg4vd
+bash scripts/setup_envs.sh megarag2
 bash scripts/setup_envs.sh mineru
 bash scripts/setup_envs.sh reranker
 ```
 
-Knobs (env vars): `CONDA_BASE`, `KG4VD_ENV` / `MINERU_ENV` / `RERANKER_ENV`
+Knobs (env vars): `CONDA_BASE`, `megarag2_ENV` / `MINERU_ENV` / `RERANKER_ENV`
 (env names), `TORCH_INDEX` (PyTorch wheel index), `PYVER` (default `3.10`).
 Override `TORCH_INDEX` if your CUDA setup needs a different PyTorch build.
 
@@ -40,16 +40,16 @@ Then configure and verify the CLI:
 
 ```bash
 cp .env.example .env        # fill OPENROUTER_API_KEY, MINERU_PYTHON, ...
-conda activate kg4vd
-kg4vd --help
+conda activate megarag2
+megarag2 --help
 ```
 
 ## Manual install (per env)
 
-### 1. `kg4vd` - core + GME encoder
+### 1. `megarag2` - core + GME encoder
 ```bash
-conda create -n kg4vd python=3.10 -y
-conda activate kg4vd
+conda create -n megarag2 python=3.10 -y
+conda activate megarag2
 pip install torch torchvision \
     --index-url <your-pytorch-wheel-index>
 pip install -e '.[gme,viz,dev]'
@@ -66,10 +66,10 @@ pip install -r services/mineru/requirements.txt
 See [`services/mineru/README.md`](./services/mineru/README.md). Point ingest at
 this env with `MINERU_PYTHON=<conda>/envs/mineru/bin/python`.
 
-### 3. `kg4vd_reranker` - reranker service (optional, query only)
+### 3. `megarag2_reranker` - reranker service (optional, query only)
 ```bash
-conda create -n kg4vd_reranker python=3.10 -y
-conda activate kg4vd_reranker
+conda create -n megarag2_reranker python=3.10 -y
+conda activate megarag2_reranker
 pip install torch==2.8.0 torchvision==0.23.0 \
     --index-url <your-pytorch-wheel-index>
 pip install -r services/reranker/requirements.txt
@@ -79,7 +79,7 @@ See [`services/reranker/README.md`](./services/reranker/README.md). Launch with
 
 ### 4. LLM backend
 
-sglang is not required. KG4VD can use:
+sglang is not required. MegaRAG2 can use:
 
 - OpenRouter, the default in the provided recipes.
 - OpenAI, by setting the recipe LLM kind to `openai` and providing `OPENAI_API_KEY`.
@@ -94,7 +94,7 @@ is an example launcher for the model used in our experiments.
 `cp .env.example .env`, then set:
 - `OPENROUTER_API_KEY` or `OPENAI_API_KEY` - depending on the remote LLM backend.
 - `MINERU_PYTHON` - path to the MinerU env's python (ingest).
-- `KG4VD_RERANKER_URL` - optional; defaults to `http://127.0.0.1:8003`.
+- `MegaRAG2_RERANKER_URL` - optional; defaults to `http://127.0.0.1:8003`.
 
 Local sglang does not require an API key, but it does require a separately
 installed local LLM server.
@@ -103,10 +103,10 @@ installed local LLM server.
 
 | Task | Needs |
 |---|---|
-| `kg4vd build` with OpenRouter or OpenAI | `kg4vd` + `mineru` + the matching API key |
-| `kg4vd build` with local sglang | `kg4vd` + `mineru` + sglang |
-| `kg4vd query` with OpenRouter or OpenAI | `kg4vd` + the matching API key |
-| `kg4vd query` with reranker or local sglang | `kg4vd` + `kg4vd_reranker` and/or sglang |
+| `megarag2 build` with OpenRouter or OpenAI | `megarag2` + `mineru` + the matching API key |
+| `megarag2 build` with local sglang | `megarag2` + `mineru` + sglang |
+| `megarag2 query` with OpenRouter or OpenAI | `megarag2` + the matching API key |
+| `megarag2 query` with reranker or local sglang | `megarag2` + `megarag2_reranker` and/or sglang |
 
 The query path auto-starts/stops the reranker + sglang servers (`--no-manage-*`
 to run them yourself) only when those local services are enabled.
